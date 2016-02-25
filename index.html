@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+GPL License
+-->
+<html>
+    <head>
+        <title>Formula-Finder</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="zahlen.js"></script>
+        <script type="text/javascript" src="zahlenui.js"></script>
+    </head>
+    <body>
+        <div><a href="qunit.html">Test</a> <a href="gentest.html">Generator Test</a></div>
+        
+        <div>
+            <button id="example0">Example 0</button>
+            <button id="example1">Example 1</button>
+            <button id="example2">Example 2</button>
+            <button id="example3">Example 3</button>
+        </div>
+        <div id="operations"></div>
+        <table>
+            <tr><td><input type="number" id="l0" value="8"></td><td><input type="number" id="r0" value="3"></td><td>=<input type="number" id="e0" value="510"></td></tr>
+            <tr><td><input type="number" id="l1" value="9"></td><td><input type="number" id="r1" value="1"></td><td>=<input type="number" id="e1" value="89"></td></tr>
+            <tr><td><input type="number" id="l2" value="18"></td><td><input type="number" id="r2" value="7"></td><td>=<input type="number" id="e2" value="1124"></td></tr>
+            <tr><td><input type="number" id="l3" value="12"></td><td><input type="number" id="r3" value="4"></td><td>=<input type="number" id="e3" value="815"></td></tr>
+            <tr><td><input type="number" id="l4" value="6"></td><td><input type="number" id="r4" value="2"></td><td>=<input type="number" id="e4" value="47"></td></tr>
+            <tr><td><input type="number" id="l5" value=""></td><td><input type="number" id="r5" value=""></td><td>=<input type="number" id="e5" value=""></td></tr>
+            <tr><td><input type="number" id="l6" value=""></td><td><input type="number" id="r6" value=""></td><td>=<input type="number" id="e6" value=""></td></tr>
+        </table>
+        <div>
+            Formula Tree Depth: <input type="numeric" id="treeDept" value="2"> Max Operations: <input type="numeric" id="maxOperations">
+        </div>
+        <div>
+        <button id="solve">Find Formula</button><button id="clean">Clean</button>
+        </div>
+        <div id="wait">Searching Solution, Wait...</div>
+        Solution: <span id="solution"></span>
+    </body>
+</html>

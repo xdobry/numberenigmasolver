@@ -1,6 +1,11 @@
 # Number Enigma Solver
 Search formula to solve easy two parameters functions. For example to find that 4 op 6 = 210 (the formula is (b-a)|(a+b)).
 
+The program is implemented in java script and can be run in browser which supports ECMA6.
+So you need a modern browser. The computation may take more time so the browser can complain about it by
+displaing some dialog about long-time java script processes.
+Just let it compute more.
+
 # Inspiration
 
 The program is to find solution for enigma described in german magazine
@@ -67,5 +72,5 @@ By playing with program the interesting thing is that the program can find formu
 random entered numbers. It whould be quite interesting to find out what are relations between
 kind of operations, number ranges, examples amount and complexity of formulas.
 Are special numbers that can be not mapped by any formulas (Beside of trivial a op b = c; a op b = d; d<>c).
-I have no idea if the formulare finder could be usable beside such mathematical plays.
+I have no idea if the formula finder could be usable beside such mathematical plays.
 

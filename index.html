@@ -39,7 +39,9 @@ GPL License
             Max parameter constant value: <input type="number" id="maxConstant" min="1" max="10" value="1">
         </div>
         <div>
-        <button id="solve">Find Formula</button><button id="clean">Clean</button>
+        <button id="solve">Find Formula</button>
+        <button id="count">Count Formula Variations</button>
+        <button id="clean">Clean</button>
         </div>
         Solution: <span id="solution"></span>
         <hr>
@@ -52,5 +54,16 @@ GPL License
             The program is to find solution for enigma described in german magazine <a href="http://www.spiegel.de/wissenschaft/mensch/raetsel-der-woche-der-taschenrechner-spinnt-a-1077064.html">Rätsel Tachenrechner spinnt</a>
         The article is based on mathematical enigma twitted by @yabazin_gazou
         </p>
+        <p>
+            Please consider that the count of variation grow rapidly by tree depth. Hier example for all operations and only one constant. My computer
+            can test million formulas in one second.
+        </p>
+        <table>
+            <tr><th>Depth</th><th>Variations</th><th>Computation Time</th></tr>
+            <tr><td>0 (only one operation)</td><td>54 (6*3*3)</td><td>at once</td></tr>
+            <tr><td>1</td><td>19494</td><td>0.018 seconds</td></tr>
+            <tr><td>2</td><td>2293449606</td><td>2117 (35 minutes)</td></tr>
+            <tr><td>3</td><td>31560004644661744000 (3*10^19)</td><td>926602 years</td></tr>
+        </table>
     </body>
 </html>

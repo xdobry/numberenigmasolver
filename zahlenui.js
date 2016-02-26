@@ -23,11 +23,18 @@ $(document).ready(function() {
             $("#solve").attr("disabled", "disabled");
             $("#solution").text("searching formula (wait...)");
             setTimeout(function() {
+                var start = new Date().getTime();
                 var formula = FORMULAFINDER.sucheformel(proben,getOptions());
-                $("#solution").text(FORMULAFINDER.formulaAsString(formula));
+                var end = new Date().getTime();
+                $("#solution").text(FORMULAFINDER.formulaAsString(formula)+ " in seconds: "+((end-start)/1000));
                 $("#solve").removeAttr("disabled");
             },0);
         }       
+    });
+    $("#count").click(function () {
+        var count = FORMULAFINDER.formulaCount(getOptions());
+        var timeSeconds = count/getOperationsPerSecond();
+        $("#solution").text("possible formulas count: "+ count + " computation time in seconds: "+timeSeconds); 
     });
     function getOptions() {
         var opt = {
@@ -46,6 +53,18 @@ $(document).ready(function() {
             }
         });
         return opt;
+    }
+    var operationPerSecond = undefined;
+    function getOperationsPerSecond() {
+        if (operationPerSecond===undefined) {
+            var probe = [[8,3,510],[9,1,89],[18,7,1124],[8,3,510]];
+            var start = new Date().getTime();
+            FORMULAFINDER.sucheformel(probe,{maxDepth:1});
+            var end = new Date().getTime();
+            var count = FORMULAFINDER.formulaCount({maxDepth:1})
+            operationPerSecond = (count*1000)/(end-start);
+        }
+        return operationPerSecond;
     }
     function setExample(num) {
         var examples = [

@@ -57,20 +57,6 @@ var FORMULAFINDER = (function () {
             }
         }
 
-        function* genFormula(deep) {
-            var desc = {};
-            for (let operation of options.operations) {
-                desc.op=operation;
-                for (let lparam of genParam(deep)) {
-                    for (let rparam of genParam(deep)) {
-                        desc.l = lparam;
-                        desc.r = rparam;
-                        yield desc;
-                    }
-                }
-            }
-        }
-
         function* genFormulaLeftRight(l,r) {
             var root = {};
             for (let par1 of genParam(l)) {
@@ -96,7 +82,7 @@ var FORMULAFINDER = (function () {
         }
         
         options = options || {};
-        checkOptions(options)
+        checkOptions(options);
         for (let i=1;i<=options.maxConstant;i++) {
             parameters.push(i);
         }
@@ -161,12 +147,37 @@ var FORMULAFINDER = (function () {
         return "(" + paramAsString(desc.l) + desc.op.sign + paramAsString(desc.r)+ ")";
     }
     
-    zahlenf.formelCount = function(deep) {
-        var i = 0;
-        for (let f of genFormula(deep)) {
-            i++;
+    zahlenf.formulaCount = function(options) {
+        options = options || {};
+        checkOptions(options);
+        
+        function countParam(deep) {
+            var count = 0;
+            if (deep==0) {
+                count = 2+options.maxConstant;
+            } else {
+                count = countFormulaTill(deep-1);
+            }
+            return count;
         }
-        return i;
+
+        function countFormulaLeftRight(l,r) {
+            return countParam(l)*countParam(r)*options.operations.length;
+        }
+
+        function countFormulaTill(deep) {
+            var count = 0;
+            for (let x=0;x<=deep;x++) {
+                for (let i=0;i<x;i++) {
+                    count += countFormulaLeftRight(x,i);
+                    count += countFormulaLeftRight(i,x);
+                }
+                count += countFormulaLeftRight(x,x);
+            }
+            return count;
+        }
+        
+        return countFormulaTill(options.maxDepth);
     }
     zahlenf.operations=operationsDef;
     zahlenf.evalFormula=evalFormel;

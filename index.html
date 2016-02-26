@@ -13,14 +13,13 @@ GPL License
     </head>
     <body>
         <div><a href="qunit.html">Test</a> <a href="gentest.html">Generator Test</a></div>
-        
+        <hr>
         <div>
-            <button id="example0">Example 0</button>
-            <button id="example1">Example 1</button>
-            <button id="example2">Example 2</button>
-            <button id="example3">Example 3</button>
+            <button id="example2">Original Japan Example</button>
+            <button id="example3">Spiegel Example</button>
+            <button id="example0">Simple Addition Example</button>
+            <button id="example1">Simple 2 Operations Example</button>
         </div>
-        <div id="operations"></div>
         <table>
             <tr><td><input type="number" id="l0" value="8"></td><td><input type="number" id="r0" value="3"></td><td>=<input type="number" id="e0" value="510"></td></tr>
             <tr><td><input type="number" id="l1" value="9"></td><td><input type="number" id="r1" value="1"></td><td>=<input type="number" id="e1" value="89"></td></tr>
@@ -31,12 +30,27 @@ GPL License
             <tr><td><input type="number" id="l6" value=""></td><td><input type="number" id="r6" value=""></td><td>=<input type="number" id="e6" value=""></td></tr>
         </table>
         <div>
-            Formula Tree Depth: <input type="numeric" id="treeDept" value="2"> Max Operations: <input type="numeric" id="maxOperations">
+            Formula Tree Depth: <input type="number" id="treeDept" value="2" min="0" max="3"> 
+            Max Operations: <input type="number" id="maxOperations" min="1" max="10">
+        </div>
+        <div id="opcompexity">
+            <div id="operations">
+            </div>
+            Max parameter constant value: <input type="number" id="maxConstant" min="1" max="10" value="1">
         </div>
         <div>
         <button id="solve">Find Formula</button><button id="clean">Clean</button>
         </div>
-        <div id="wait">Searching Solution, Wait...</div>
         Solution: <span id="solution"></span>
+        <hr>
+        Source code on <a href="https://github.com/xdobry/numberenigmasolver">GitHub</a>
+        <p>
+        Search formula to solve easy two parameters functions. For example to find that 4 op 6 = 210 (the formula is (b-a)|(a+b)).
+        The program is implemented in java script and can be run in browser which supports ECMA6. So you need a modern browser.
+        </p>
+        <p>
+            The program is to find solution for enigma described in german magazine <a href="http://www.spiegel.de/wissenschaft/mensch/raetsel-der-woche-der-taschenrechner-spinnt-a-1077064.html">Rätsel Tachenrechner spinnt</a>
+        The article is based on mathematical enigma twitted by @yabazin_gazou
+        </p>
     </body>
 </html>

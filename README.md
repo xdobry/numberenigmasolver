@@ -1,6 +1,8 @@
 # Number Enigma Solver
 Search formula to solve easy two parameters functions. For example to find that 4 op 6 = 210 (the formula is (b-a)|(a+b)).
 
+<a href="http://xdobry.github.io/numberenigmasolver">Try the program directly in your browser</a>.
+
 The program is implemented in java script and can be run in browser which supports ECMA6.
 So you need a modern browser. The computation may take more time so the browser can complain about it by
 displaing some dialog about long-time java script processes.

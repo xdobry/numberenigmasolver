@@ -5,10 +5,10 @@ $(document).ready(function() {
     $("#wait").hide();
     var operations = "<div id='operations'>";
     for (let operation of FORMULAFINDER.operations) {
-        operations += "<input type='checkbox' name='operation' value='"+operation.op+"'>"+operation.op+"<br>";
+        operations += "<input type='checkbox' name='operation' checked='checked' value='"+operation.name+"'>"+operation.name+"("+operation.sign+")"+"<br>";
     }
     operations += "</div>";
-    $("#operations").replace(operations);
+    $("#operations").replaceWith(operations);
     $("#solve").click(function() {
         var i,proben = [];
         for (i=0;i<=rowsCount;i++) {
@@ -20,16 +20,33 @@ $(document).ready(function() {
             }
         }
         if (proben.length>0) {
-             $("#wait").show();
             $("#solve").attr("disabled", "disabled");
+            $("#solution").text("searching formula (wait...)");
             setTimeout(function() {
-                var formula = FORMULAFINDER.sucheformel(proben,2);
+                var formula = FORMULAFINDER.sucheformel(proben,getOptions());
                 $("#solution").text(FORMULAFINDER.formulaAsString(formula));
-                $("#wait").hide();
                 $("#solve").removeAttr("disabled");
             },0);
         }       
     });
+    function getOptions() {
+        var opt = {
+            operations: [],
+            maxOperations: 0
+        };
+        opt.maxDepth = parseInt($("#treeDept").val());
+        opt.maxConstant = parseInt($("#maxConstant").val());
+        $("input[name='operation']:checked").each(function() {
+            var opname = $(this).val();
+            for (let operation of FORMULAFINDER.operations) {
+                if (operation.name===opname) {
+                    opt.operations.push(operation);
+                    break;
+                }
+            }
+        });
+        return opt;
+    }
     function setExample(num) {
         var examples = [
             [[1,2,3],[2,2,4],[3,3,6]],

@@ -28,77 +28,95 @@ var FORMULAFINDER = (function () {
         this.sign = sign;
     }
     
-    var operations = [
+    var operationsDef = [
         new Operation("plus",function(a,b) { 
             return a+b;
         },"+"),
         new Operation("minus",function(a,b) { return a-b;},"-"),
-        //new Operation("mult",function(a,b) { return a*b;},"*"),
-        //new Operation("div",function(a,b) { return Math.round(a/b); },"/"),
-        //new Operation("rest",function(a,b) { return a%b;},"%"),
+        new Operation("mult",function(a,b) { return a*b;},"*"),
+        new Operation("div",function(a,b) { return Math.floor(a/b); },"/"),
+        new Operation("reminder",function(a,b) { return a%b;},"%"),
         new Operation("concat",function(a,b) { 
             return parseInt(a.toString()+b.toString());
         },"|")
     ];
     
-    var parameters = ["a","b",1];
-
+        
+    zahlenf.sucheformel = function(probeArr,options) {
+        var parameters = ["a","b"];
     
-    function* genParam(deep) {
-        if (deep==0) {
-            for (let p of parameters) {
-                yield p;
-            }
-        } else {
-            for (let p of genFormulaTill(deep-1)) {
-                yield p;
-            }
-        }
-    }
-    
-    function* genFormula(deep) {
-        var desc = {};
-        for (let operation of operations) {
-            desc.op=operation;
-            for (let lparam of genParam(deep)) {
-                for (let rparam of genParam(deep)) {
-                    desc.l = lparam;
-                    desc.r = rparam;
-                    yield desc;
+        function* genParam(deep) {
+            if (deep==0) {
+                for (let p of parameters) {
+                    yield p;
+                }
+            } else {
+                for (let p of genFormulaTill(deep-1)) {
+                    yield p;
                 }
             }
         }
-    }
-    
-    function* genFormulaLeftRight(l,r) {
-        var root = {};
-        for (let par1 of genParam(l)) {
-            for (let par2 of genParam(r)) {
-                for (let operation of operations) {
-                    root.op=operation;
-                    root.l = par1;
-                    root.r = par2;
-                    yield root;
+
+        function* genFormula(deep) {
+            var desc = {};
+            for (let operation of options.operations) {
+                desc.op=operation;
+                for (let lparam of genParam(deep)) {
+                    for (let rparam of genParam(deep)) {
+                        desc.l = lparam;
+                        desc.r = rparam;
+                        yield desc;
+                    }
                 }
             }
         }
-    }
 
-    function* genFormulaTill(deep) {
-        for (let x=0;x<=deep;x++) {
-            for (let i=0;i<x;i++) {
-                for (let t of genFormulaLeftRight(x,i)) { yield t; }
-                for (let t of genFormulaLeftRight(i,x)) { yield t; }
+        function* genFormulaLeftRight(l,r) {
+            var root = {};
+            for (let par1 of genParam(l)) {
+                for (let par2 of genParam(r)) {
+                    for (let operation of options.operations) {
+                        root.op=operation;
+                        root.l = par1;
+                        root.r = par2;
+                        yield root;
+                    }
+                }
             }
-            for (let t of genFormulaLeftRight(x,x)) { yield t; }
         }
-    }
-    
-    zahlenf.sucheformel = function(probeArr,maxDeep) {
-        for (let f of genFormulaTill(maxDeep)) {
+
+        function* genFormulaTill(deep) {
+            for (let x=0;x<=deep;x++) {
+                for (let i=0;i<x;i++) {
+                    for (let t of genFormulaLeftRight(x,i)) { yield t; }
+                    for (let t of genFormulaLeftRight(i,x)) { yield t; }
+                }
+                for (let t of genFormulaLeftRight(x,x)) { yield t; }
+            }
+        }
+        
+        options = options || {};
+        checkOptions(options)
+        for (let i=1;i<=options.maxConstant;i++) {
+            parameters.push(i);
+        }
+        
+        for (let f of genFormulaTill(options.maxDepth)) {
             if (testProben(f,probeArr)) {
                 return f;
             }
+        }
+    }
+    
+    function checkOptions(options) {
+        if (options.maxDepth===undefined) {
+            options.maxDepth = 2;
+        }
+        if (options.operations===undefined) {
+            options.operations = operationsDef;
+        }
+        if (options.maxConstant===undefined) {
+            options.maxConstant = 1;
         }
     }
     
@@ -150,7 +168,7 @@ var FORMULAFINDER = (function () {
         }
         return i;
     }
-    zahlenf.operations=operations;
+    zahlenf.operations=operationsDef;
     zahlenf.evalFormula=evalFormel;
     
     return zahlenf;

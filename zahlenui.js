@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * GPL License
+ * Programmed by Artur Trzewik
+ */
 $(document).ready(function() {
     var rowsCount = 6;
     $("#wait").hide();
@@ -39,10 +43,14 @@ $(document).ready(function() {
     function getOptions() {
         var opt = {
             operations: [],
-            maxOperations: 0
+            maxOperations: undefined,
         };
         opt.maxDepth = parseInt($("#treeDept").val());
         opt.maxConstant = parseInt($("#maxConstant").val());
+        var maxOperations = $("#maxOperations").val();
+        if (maxOperations!=="" && maxOperations!=="0") {
+            opt.maxOperations = parseInt(maxOperations);
+        }
         $("input[name='operation']:checked").each(function() {
             var opname = $(this).val();
             for (let operation of FORMULAFINDER.operations) {

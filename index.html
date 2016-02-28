@@ -31,7 +31,7 @@ GPL License
         </table>
         <div>
             Formula Tree Depth: <input type="number" id="treeDept" value="2" min="0" max="3"> 
-            Max Operations: <input type="number" id="maxOperations" min="1" max="10">
+            Max Operations: <input type="number" id="maxOperations" min="0" max="10">
         </div>
         <div id="opcompexity">
             <div id="operations">
@@ -59,11 +59,11 @@ GPL License
             can test million formulas in one second.
         </p>
         <table>
-            <tr><th>Depth</th><th>Variations</th><th>Computation Time</th></tr>
-            <tr><td>0 (only one operation)</td><td>54 (6*3*3)</td><td>at once</td></tr>
-            <tr><td>1</td><td>19494</td><td>0.018 seconds</td></tr>
-            <tr><td>2</td><td>2293449606</td><td>2117 (35 minutes)</td></tr>
-            <tr><td>3</td><td>31560004644661744000 (3*10^19)</td><td>926602 years</td></tr>
+            <tr><th>Depth</th><th>Max Operations</th><th>Variations</th><th>Computation Time</th></tr>
+            <tr><td>0</td><td>1</td><td>54 (6*3*3)</td><td>at once</td></tr>
+            <tr><td>1</td><td>3</td><td>19494</td><td>0.018 seconds</td></tr>
+            <tr><td>2</td><td>7</td><td>2280798054</td><td>2117 (35 minutes)</td></tr>
+            <tr><td>3</td><td>15</td><td>31212238660889850000 (3*10^19)</td><td>926602 years</td></tr>
         </table>
     </body>
 </html>

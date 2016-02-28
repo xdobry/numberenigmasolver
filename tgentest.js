@@ -1,8 +1,12 @@
 "use strict";
 
-/* 
- * test tree generators
+/**
+ * GPL License
+ * Programmed by Artur Trzewik
+ * 
+ * Here only some test code to prove and develop tree generations algoritms
  */
+
 
 var tg = {};
 
@@ -19,14 +23,16 @@ tg.treeAsString= function(tree) {
     return "("+paramAsString(tree.l)+","+paramAsString(tree.r)+")";
 }
 
-function* paramGen(deep) {
-    if (deep==0) {
-        for (let p of tg.leafs) {
-            yield p;
-        }
-    } else {
-        for (let t of treeGen(deep-1)) {
-            yield t;
+function* paramGen(deep,maxop) {
+    if (maxop===undefined || maxop>=0) {
+        if (deep==0) {
+            for (let p of tg.leafs) {
+                yield p;
+            }
+        } else {
+            for (let t of treeGenTillOneSide(deep-1,maxop)) {
+                yield t;
+            }
         }
     }
 }
@@ -42,10 +48,26 @@ function* treeGen(deep) {
     }
 }
 
-function* treeGenLeftRight(l,r) {
+function countOperations(tree) {
+    if (typeof tree === "object") {
+        return 1 + countOperations(tree.l) + countOperations(tree.r)
+    } else {
+        return 0;
+    }
+}
+
+function* treeGenLeftRight(l,r,maxop) {
     var root = {};
-    for (let par1 of paramGen(l)) {
-        for (let par2 of paramGen(r)) {
+    var parMax = undefined;
+    if (maxop!==undefined) {
+        parMax = maxop-1;
+    }
+    for (let par1 of paramGen(l,parMax)) {
+        var opCount = undefined;
+        if (maxop!==undefined) {
+            var opCount = maxop-1-countOperations(par1);
+        }
+        for (let par2 of paramGen(r,opCount)) {
             root.l = par1;
             root.r = par2;
             yield root;
@@ -53,14 +75,22 @@ function* treeGenLeftRight(l,r) {
     }
 }
 
-function* treeGenTill(deep) {
+function* treeGenTill(deep,maxop) {
     for (let x=0;x<=deep;x++) {
         for (let i=0;i<x;i++) {
-            for (let t of treeGenLeftRight(x,i)) { yield t; }
-            for (let t of treeGenLeftRight(i,x)) { yield t; }
+            for (let t of treeGenLeftRight(x,i,maxop)) { yield t; }
+            for (let t of treeGenLeftRight(i,x,maxop)) { yield t; }
         }
-        for (let t of treeGenLeftRight(x,x)) { yield t; }
+        for (let t of treeGenLeftRight(x,x,maxop)) { yield t; }
     }
+}
+
+function* treeGenTillOneSide(deep,maxop) {
+    for (let i=0;i<deep;i++) {
+        for (let t of treeGenLeftRight(deep,i,maxop)) { yield t; }
+        for (let t of treeGenLeftRight(i,deep,maxop)) { yield t; }
+    }
+    for (let t of treeGenLeftRight(deep,deep,maxop)) { yield t; }
 }
 
 function* idMaker() {
@@ -88,13 +118,30 @@ QUnit.test("init", function (assert) {
     console.info("tree till 1")
     for (let t of treeGenTill(1)) { console.info(tg.treeAsString(t)); }
     
-    for (let x=0;x<=4;x++) {
-        for (let i=0;i<x;i++) {
-            console.info(x+" "+i);
-            console.info(i+" "+x);
+    var trees = new Map();
+    var count = 0;
+    var countTill4 = 0;
+    for (let t of treeGenTill(2)) { 
+        if (countOperations(t)<=4) {
+            countTill4++;
         }
-        console.info(x+" "+x);
+        trees.set(tg.treeAsString(t),1);
+        count++;
     }
+    assert.equal(trees.size,count,"unique produced trees");
+    console.info("found trees of 2 "+trees.size + " produced "+count);
+    
+    console.info("tree till 2 max 4");
+    trees = new Map();
+    count = 0;
+    for (let t of treeGenTill(2,4)) { 
+        trees.set(tg.treeAsString(t),1);
+        console.info(tg.treeAsString(t)); 
+        count++;
+    }
+    console.info("found trees of 2 (max 4): "+trees.size + " produced "+count + " counter all till 4: "+countTill4);
+    assert.equal(trees.size,countTill4,"unique produced trees max 4 depth 2");
+
 });
 
 

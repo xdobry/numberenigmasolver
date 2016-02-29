@@ -42,13 +42,13 @@ GPL License
         <button class="btn btn-default" id="clean">Clean</button>
         <p></p>
         <table id="numbertable">
-            <tr><td><input type="number" id="l0"></td><td>+ <input type="number" id="r0"></td><td>= <input type="number" id="e0"></td></tr>
-            <tr><td><input type="number" id="l1"></td><td>+ <input type="number" id="r1"></td><td>= <input type="number" id="e1"></td></tr>
-            <tr><td><input type="number" id="l2"></td><td>+ <input type="number" id="r2"></td><td>= <input type="number" id="e2"></td></tr>
-            <tr><td><input type="number" id="l3"></td><td>+ <input type="number" id="r3"></td><td>= <input type="number" id="e3"></td></tr>
-            <tr><td><input type="number" id="l4"></td><td>+ <input type="number" id="r4"></td><td>= <input type="number" id="e4"></td></tr>
-            <tr><td><input type="number" id="l5"></td><td>+ <input type="number" id="r5"></td><td>= <input type="number" id="e5"></td></tr>
-            <tr><td><input type="number" id="l6"></td><td>+ <input type="number" id="r6"></td><td>= <input type="number" id="e6"></td></tr>
+            <tr><td><input type="number" id="l0"></td><td> + <input type="number" id="r0"></td><td> = <input type="number" id="e0"></td></tr>
+            <tr><td><input type="number" id="l1"></td><td> + <input type="number" id="r1"></td><td> = <input type="number" id="e1"></td></tr>
+            <tr><td><input type="number" id="l2"></td><td> + <input type="number" id="r2"></td><td> = <input type="number" id="e2"></td></tr>
+            <tr><td><input type="number" id="l3"></td><td> + <input type="number" id="r3"></td><td> = <input type="number" id="e3"></td></tr>
+            <tr><td><input type="number" id="l4"></td><td> + <input type="number" id="r4"></td><td> = <input type="number" id="e4"></td></tr>
+            <tr><td><input type="number" id="l5"></td><td> + <input type="number" id="r5"></td><td> = <input type="number" id="e5"></td></tr>
+            <tr><td><input type="number" id="l6"></td><td> + <input type="number" id="r6"></td><td> = <input type="number" id="e6"></td></tr>
             <tr class="questionrow"><td><input type="number" id="le"></td><td>+ <input type="number" id="re"></td><td>= <span id="ee">?</span></td></tr>
         </table>
         <br>
@@ -65,15 +65,13 @@ GPL License
         <h4>Solution: <span id="solution" class="bg-success"></span></h3>
             </div>
             <div class="col-md-6">
-                <div>
-                    Formula Tree Depth: <input type="number" id="treeDept" value="2" min="0" max="3"> 
-                    Max Operations: <input type="number" id="maxOperations" min="0" max="10">
-                </div>
-                <div id="opcompexity">
+                <div class="form-group"><label for="treeDept">Formula Tree Depth:</label><input type="number" id="treeDept" value="2" min="0" max="3"></div>
+                <div class="form-group"><label for="maxOperations">Max Operations:</label><input type="number" id="maxOperations" min="0" max="10"></div>
+                <div id="opcompexity" class="checkbox">
                     <div id="operations">
                     </div>
-                    Max parameter constant value: <input type="number" id="maxConstant" min="1" max="10" value="1">
                 </div>
+                <div class="form-group"><label for="maxConstant">Max parameter constant value:</label><input type="number" id="maxConstant" min="1" max="10" value="1"></div>
             </div>
         </div>
         <hr>

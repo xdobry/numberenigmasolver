@@ -9,7 +9,7 @@ $(document).ready(function() {
     $("#wait").hide();
     var operations = "<div id='operations'>";
     for (let operation of FORMULAFINDER.operations) {
-        operations += "<input type='checkbox' name='operation' checked='checked' value='"+operation.name+"'>"+operation.name+"("+operation.sign+")"+"<br>";
+        operations += "<label><input type='checkbox' name='operation' checked='checked' value='"+operation.name+"'>"+operation.name+"("+operation.sign+")"+"</label><br>";
     }
     operations += "</div>";
     $("#operations").replaceWith(operations);

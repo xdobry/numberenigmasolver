@@ -98,6 +98,33 @@ var FORMULAFINDER = (function () {
             for (let t of genFormulaLeftRight(deep,deep,maxop)) { yield t; }
         }
         
+        function checkResult() {
+            var it,f,i = 0;
+            it = generator.next();
+            while (!it.done) {
+                f = it.value;
+                if (testProben(f,probeArr)) {
+                    options.callback(f,testCount);
+                    return;
+                }
+                i++;
+                testCount++;
+                if (i>step) {
+                    break;
+                }
+                it = generator.next();
+            }
+            if (!it.done) {
+                var endTime = new Date().getTime();
+                var timeDiff = endTime-startTime;
+                options.progressCallback(testCount/fCount*100,timeDiff*(fCount-testCount)/(testCount*1000));
+                setTimeout(checkResult,0);
+            } else {
+                options.progressCallback(100,0);
+                options.callback(undefined,testCount);
+            }
+        }
+        
         options = options || {};
         checkOptions(options);
         for (let i=1;i<=options.maxConstant;i++) {
@@ -114,32 +141,6 @@ var FORMULAFINDER = (function () {
             var step = 2000000;
             var generator = genFormulaTill(options.maxDepth,options.maxOperations);
             var testCount = 0;
-            function checkResult() {
-                var it,f,i = 0;
-                it = generator.next();
-                while (!it.done) {
-                    f = it.value;
-                    if (testProben(f,probeArr)) {
-                        options.callback(f,testCount);
-                        return;
-                    }
-                    i++;
-                    testCount++;
-                    if (i>step) {
-                        break;
-                    }
-                    it = generator.next();
-                }
-                if (!it.done) {
-                    var endTime = new Date().getTime();
-                    var timeDiff = endTime-startTime;
-                    options.progressCallback(testCount/fCount*100,timeDiff*(fCount-testCount)/(testCount*1000));
-                    setTimeout(checkResult,0);
-                } else {
-                    options.progressCallback(100,0);
-                    options.callback(undefined,testCount);
-                }
-            }
             checkResult();
         } else {
             for (let f of genFormulaTill(options.maxDepth,options.maxOperations)) {

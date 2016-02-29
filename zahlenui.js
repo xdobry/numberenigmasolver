@@ -44,7 +44,7 @@ $(document).ready(function() {
                 var options = getOptions();
                 options.callback = function(formula,testCount) {
                     var end = new Date().getTime();
-                    $("#solution").text(FORMULAFINDER.formulaAsString(formula)+ " in seconds: "+((end-start)/1000));
+                    $("#solution").text(FORMULAFINDER.formulaAsString(formula)+ " in seconds: "+((end-start)/1000)+ " formulas evaluated: "+testCount);
                     $("#solve").removeAttr("disabled");
                     if (formula!==undefined) {
                         var le = $("#le").val();

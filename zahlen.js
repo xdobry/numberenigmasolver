@@ -117,23 +117,27 @@ var FORMULAFINDER = (function () {
             function checkResult() {
                 var it,f,i = 0;
                 it = generator.next();
-                while (!next.done) {
-                    f = next.value;
+                while (!it.done) {
+                    f = it.value;
                     if (testProben(f,probeArr)) {
                         options.callback(f,testCount);
                         return;
                     }
                     i++;
+                    testCount++;
                     if (i>step) {
                         break;
                     }
                     it = generator.next();
                 }
-                if (!next.done) {
+                if (!it.done) {
                     var endTime = new Date().getTime();
                     var timeDiff = endTime-startTime;
-                    options.progressCallback(testCount/fCount*100,timeDiff*(fCount-testCount)/(fCount*1000));
+                    options.progressCallback(testCount/fCount*100,timeDiff*(fCount-testCount)/(testCount*1000));
                     setTimeout(checkResult,0);
+                } else {
+                    options.progressCallback(100,0);
+                    options.callback(undefined,testCount);
                 }
             }
             checkResult();

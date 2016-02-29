@@ -2,7 +2,7 @@
 <!--
 GPL License
 -->
-<html>
+<html lang="en">
     <head>
         <title>Formula-Finder</title>
         <meta charset="UTF-8">
@@ -10,19 +10,37 @@ GPL License
         <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         <script type="text/javascript" src="zahlen.js"></script>
         <script type="text/javascript" src="zahlenui.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     </head>
     <body>
-        <div><a href="qunit.html">Test</a> <a href="gentest.html">Generator Test</a></div>
-        <hr>
-        <div>
-            <button id="example2">Original Japan Example</button>
-            <button id="example3">Spiegel Example</button>
-            <button id="example0">Simple Addition Example</button>
-            <button id="example1">Simple 2 Operations Example</button>
-            <button id="addRandom">Add Random Row</button>
-            <br>
-            <button id="clean">Clean</button>
+        <nav class="navbar navbar-default">
+  	<div class="container">
+    	 <ul class="nav navbar-nav">
+    	 	<li> <a href="qunit.html" class="navbar-link">QUnit</a></li>
+    	 	<li><a href="gentest.html" class="navbar-link">QUnit Generator</a></li>
+    	 	<li><a href="https://github.com/xdobry/tclsqueak" class="navbar-link">Source Code (GitHub)</a></li>
+    	 	<li><a href="http://www.xdobry.de" class="navbar-link">Author Artur Trzewik</a></li>
+    	 </ul>
+   	</div>
+        </nav>
+        <div class="container">
+        <div class="jumbotron">
+        <h2>Number Enigma Sover</h2>
+        Search formula to solve easy two parameters functions. For example to find that 4 op 6 = 210 (the formula is (b-a)|(a+b)).
+        The program is implemented in java script and can be run in browser which supports ECMA6.
         </div>
+        <div class="row">
+            <div class="col-md-6">
+        <div class="btn-group">
+            <button id="example2"  class="btn btn-link btn-sm">Original Japan Example</button>
+            <button id="example3" class="btn btn-link btn-sm">Spiegel Example</button>
+            <button id="example0" class="btn btn-link btn-sm">Simple Addition Example</button>
+            <button id="example1" class="btn btn-link btn-sm">Simple 2 Operations Example</button>
+            <button id="addRandom" class="btn btn-link btn-sm">Add Random Row</button>
+        </div>
+        <p></p>
+        <button class="btn btn-default" id="clean">Clean</button>
+        <p></p>
         <table id="numbertable">
             <tr><td><input type="number" id="l0"></td><td>+ <input type="number" id="r0"></td><td>= <input type="number" id="e0"></td></tr>
             <tr><td><input type="number" id="l1"></td><td>+ <input type="number" id="r1"></td><td>= <input type="number" id="e1"></td></tr>
@@ -33,45 +51,54 @@ GPL License
             <tr><td><input type="number" id="l6"></td><td>+ <input type="number" id="r6"></td><td>= <input type="number" id="e6"></td></tr>
             <tr class="questionrow"><td><input type="number" id="le"></td><td>+ <input type="number" id="re"></td><td>= <span id="ee">?</span></td></tr>
         </table>
-        <div>
-            Formula Tree Depth: <input type="number" id="treeDept" value="2" min="0" max="3"> 
-            Max Operations: <input type="number" id="maxOperations" min="0" max="10">
+        <br>
+        <div class="btn-group">
+            <button class="btn btn-primary" id="solve">Find Formula</button>
+            <button class="btn btn-default" id="count">Count Formula Variations</button>
         </div>
-        <div id="opcompexity">
-            <div id="operations">
-            </div>
-            Max parameter constant value: <input type="number" id="maxConstant" min="1" max="10" value="1">
-        </div>
-        <div>
-        <button id="solve">Find Formula</button>
-        <button id="count">Count Formula Variations</button>
-        </div>
+        <p></p>
         <div class="progress">
             Show progress <input type="checkbox" id="useProgress">
             <progress id="progress" value="0" max="100"></progress>
             Max Remaining Time: <span id="remainTime"></span>
         </div>
-        Solution: <span id="solution"></span>
+        <h4>Solution: <span id="solution" class="bg-success"></span></h3>
+            </div>
+            <div class="col-md-6">
+                <div>
+                    Formula Tree Depth: <input type="number" id="treeDept" value="2" min="0" max="3"> 
+                    Max Operations: <input type="number" id="maxOperations" min="0" max="10">
+                </div>
+                <div id="opcompexity">
+                    <div id="operations">
+                    </div>
+                    Max parameter constant value: <input type="number" id="maxConstant" min="1" max="10" value="1">
+                </div>
+            </div>
+        </div>
         <hr>
-        Source code on <a href="https://github.com/xdobry/numberenigmasolver">GitHub</a>
         <p>
-        Search formula to solve easy two parameters functions. For example to find that 4 op 6 = 210 (the formula is (b-a)|(a+b)).
-        The program is implemented in java script and can be run in browser which supports ECMA6. So you need a modern browser.
-        </p>
-        <p>
-            The program is to find solution for enigma described in german magazine <a href="http://www.spiegel.de/wissenschaft/mensch/raetsel-der-woche-der-taschenrechner-spinnt-a-1077064.html">Rätsel Tachenrechner spinnt</a>
+            The program finds solution for enigma described in german magazine <a href="http://www.spiegel.de/wissenschaft/mensch/raetsel-der-woche-der-taschenrechner-spinnt-a-1077064.html">Rätsel Tachenrechner spinnt</a>
         The article is based on mathematical enigma twitted by @yabazin_gazou
         </p>
         <p>
             Please consider that the count of variation grow rapidly by tree depth. Hier example for all operations and only one constant. My computer
             can test million formulas in one second.
         </p>
-        <table>
+        <table class="table">
             <tr><th>Depth</th><th>Max Operations</th><th>Variations</th><th>Computation Time</th></tr>
             <tr><td>0</td><td>1</td><td>54 (6*3*3)</td><td>at once</td></tr>
             <tr><td>1</td><td>3</td><td>19494</td><td>0.018 seconds</td></tr>
             <tr><td>2</td><td>7</td><td>2280798054</td><td>2117 (35 minutes)</td></tr>
             <tr><td>3</td><td>15</td><td>31212238660889850000 (3*10^19)</td><td>926602 years</td></tr>
         </table>
+        </div>
+        <footer class="bg-info">
+		<div class="container">
+		<p class="text-muted text-center">
+		<a href="http://www.gnu.org/licenses/gpl-3.0">GPL Licensed Software</a> written by Artur Trzewik
+		</p>
+		</div>
+	</footer>
     </body>
 </html>

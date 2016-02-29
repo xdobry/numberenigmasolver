@@ -104,9 +104,51 @@ var FORMULAFINDER = (function () {
             parameters.push(i);
         }
         
-        for (let f of genFormulaTill(options.maxDepth,options.maxOperations)) {
-            if (testProben(f,probeArr)) {
-                return f;
+        var foundFormula = undefined,testCount=0;
+        if (options.progressCallback) {
+            if (!options.callback) {
+                throw "progressCallback need also callback function";
+            }
+            var startTime = new Date().getTime();
+            var fCount = zahlenf.formulaCount(options);
+            var step = 2000000;
+            var generator = genFormulaTill(options.maxDepth,options.maxOperations);
+            var testCount = 0;
+            function checkResult() {
+                var it,f,i = 0;
+                it = generator.next();
+                while (!next.done) {
+                    f = next.value;
+                    if (testProben(f,probeArr)) {
+                        options.callback(f,testCount);
+                        return;
+                    }
+                    i++;
+                    if (i>step) {
+                        break;
+                    }
+                    it = generator.next();
+                }
+                if (!next.done) {
+                    var endTime = new Date().getTime();
+                    var timeDiff = endTime-startTime;
+                    options.progressCallback(testCount/fCount*100,timeDiff*(fCount-testCount)/(fCount*1000));
+                    setTimeout(checkResult,0);
+                }
+            }
+            checkResult();
+        } else {
+            for (let f of genFormulaTill(options.maxDepth,options.maxOperations)) {
+                testCount++;
+                if (testProben(f,probeArr)) {
+                    foundFormula =f;
+                    break;
+                }
+            }
+            if (options.callback) {
+               options.callback(foundFormula,testCount); 
+            } else {
+                return foundFormula;
             }
         }
     }

@@ -7,7 +7,7 @@ GPL License
         <title>Formula-Finder</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         <script type="text/javascript" src="zahlen.js"></script>
         <script type="text/javascript" src="zahlenui.js"></script>
     </head>
@@ -19,15 +19,19 @@ GPL License
             <button id="example3">Spiegel Example</button>
             <button id="example0">Simple Addition Example</button>
             <button id="example1">Simple 2 Operations Example</button>
+            <button id="addRandom">Add Random Row</button>
+            <br>
+            <button id="clean">Clean</button>
         </div>
-        <table>
-            <tr><td><input type="number" id="l0" value="8"></td><td><input type="number" id="r0" value="3"></td><td>=<input type="number" id="e0" value="510"></td></tr>
-            <tr><td><input type="number" id="l1" value="9"></td><td><input type="number" id="r1" value="1"></td><td>=<input type="number" id="e1" value="89"></td></tr>
-            <tr><td><input type="number" id="l2" value="18"></td><td><input type="number" id="r2" value="7"></td><td>=<input type="number" id="e2" value="1124"></td></tr>
-            <tr><td><input type="number" id="l3" value="12"></td><td><input type="number" id="r3" value="4"></td><td>=<input type="number" id="e3" value="815"></td></tr>
-            <tr><td><input type="number" id="l4" value="6"></td><td><input type="number" id="r4" value="2"></td><td>=<input type="number" id="e4" value="47"></td></tr>
-            <tr><td><input type="number" id="l5" value=""></td><td><input type="number" id="r5" value=""></td><td>=<input type="number" id="e5" value=""></td></tr>
-            <tr><td><input type="number" id="l6" value=""></td><td><input type="number" id="r6" value=""></td><td>=<input type="number" id="e6" value=""></td></tr>
+        <table id="numbertable">
+            <tr><td><input type="number" id="l0"></td><td>+ <input type="number" id="r0"></td><td>= <input type="number" id="e0"></td></tr>
+            <tr><td><input type="number" id="l1"></td><td>+ <input type="number" id="r1"></td><td>= <input type="number" id="e1"></td></tr>
+            <tr><td><input type="number" id="l2"></td><td>+ <input type="number" id="r2"></td><td>= <input type="number" id="e2"></td></tr>
+            <tr><td><input type="number" id="l3"></td><td>+ <input type="number" id="r3"></td><td>= <input type="number" id="e3"></td></tr>
+            <tr><td><input type="number" id="l4"></td><td>+ <input type="number" id="r4"></td><td>= <input type="number" id="e4"></td></tr>
+            <tr><td><input type="number" id="l5"></td><td>+ <input type="number" id="r5"></td><td>= <input type="number" id="e5"></td></tr>
+            <tr><td><input type="number" id="l6"></td><td>+ <input type="number" id="r6"></td><td>= <input type="number" id="e6"></td></tr>
+            <tr class="questionrow"><td><input type="number" id="le"></td><td>+ <input type="number" id="re"></td><td>= <span id="ee">?</span></td></tr>
         </table>
         <div>
             Formula Tree Depth: <input type="number" id="treeDept" value="2" min="0" max="3"> 
@@ -41,7 +45,11 @@ GPL License
         <div>
         <button id="solve">Find Formula</button>
         <button id="count">Count Formula Variations</button>
-        <button id="clean">Clean</button>
+        </div>
+        <div class="progress">
+            Show progress <input type="checkbox" id="useProgress">
+            <progress id="progress" value="0" max="100"></progress>
+            Max Remaining Time: <span id="remainTime"></span>
         </div>
         Solution: <span id="solution"></span>
         <hr>

@@ -56,13 +56,13 @@ GPL License
             <button class="btn btn-default" id="count">Count Formula Variations</button>
         </div>
         <p></p>
-        <div class="progress">
-            Show progress <input type="checkbox" id="useProgress">
-            <progress id="progress" value="0" max="100"></progress>
+        <div class="form-group" id="progressui">
+            <progress id="progress" value="0" max="100" class="form-control"></progress>
+            <button class="btn btn-default btn-xs" id="break">Break</button> 
             Max Remaining Time: <span id="remainTime"></span>
         </div>
-        <h4>Solution: <span id="solution" class="bg-success"></span></h3>
         <div id="solutionsadd">
+        <h4>Solution: <span id="solution" class="bg-success"></span></h3>
             <p>
                 time: <span id="solutionTime"></span>
             </p>
@@ -84,10 +84,13 @@ GPL License
         <hr>
         <p>
             The program finds solution for enigma described in german magazine <a href="http://www.spiegel.de/wissenschaft/mensch/raetsel-der-woche-der-taschenrechner-spinnt-a-1077064.html">Rätsel Tachenrechner spinnt</a>
-        The article is based on mathematical enigma twitted by @yabazin_gazou
+        The article is based on mathematical enigma twitted by @yabazin_gazou.
         </p>
         <p>
-            Please consider that the count of variation grow rapidly by tree depth. Hier example for all operations and only one constant. My computer
+            You need relative new browser to run the code. I have tested it with Chrome 48, Firefox 44, Browser on Windows 10
+        </p>
+        <p>
+            Please consider that the count of variation grow rapidly by tree depth. Here example for all operations and only one constant. My computer
             can test million formulas in one second.
         </p>
         <table class="table">

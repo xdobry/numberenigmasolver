@@ -5,14 +5,17 @@
  * Programmed by Artur Trzewik
  */
 $(document).ready(function() {
+    var worker;
     var rowsCount = 6;
     $("#solutionsadd").hide();
+    $("#progressui").hide();
     var operations = "<div id='operations'>";
     for (let operation of FORMULAFINDER.operations) {
         operations += "<label><input type='checkbox' name='operation' checked='checked' value='"+operation.name+"'>"+operation.name+"("+operation.sign+")"+"</label><br>";
     }
     operations += "</div>";
     $("#operations").replaceWith(operations);
+    $("#break").attr("disabled", "disabled");
     $("#addRandom").click(function() {
         for (var i=0;i<rowsCount;i++) {
             var l = $("#l"+i).val();
@@ -61,7 +64,7 @@ $(document).ready(function() {
             $("#remainTime").text("");
             $("#solutionsadd").hide();
             
-            var worker = new Worker("solverworker.js");
+            worker = new Worker("solverworker.js");
             var start = new Date().getTime();
             
             worker.onerror = function(e) {
@@ -78,7 +81,6 @@ $(document).ready(function() {
                         $("#solutionsadd").show();
                         $("#solutionTime").text(displayTimeFromMillis(end-start));
                         $("#solutionCount").text(testCount.toString());
-                        $("#solve").removeAttr("disabled");
                         if (formula!==undefined) {
                             var le = $("#le").val();
                             var re = $("#re").val();
@@ -86,26 +88,43 @@ $(document).ready(function() {
                                 $("#ee").text(FORMULAFINDER.evalFormula(formula,parseInt(le),parseInt(re)));
                             }
                         }
-                        $("#progress").attr("value",0);
-                        $("#remainTime").text("");
+                        uiWaitForAction();
                         break;
                     case "progress":
                         $("#progress").attr("value",e.data.progress);
                         $("#remainTime").text(displayTimeFromMillis(e.data.timeRemainSec*1000));
+                        break;
                     default:
                         throw "unknown operation "+e.data.operation;
                 };
             };
             
             var options = getOptions();
+            $("#progressui").show();
             worker.postMessage({options: options, proben: proben});
+            $("#break").removeAttr("disabled");
         }       
+    });
+    function uiWaitForAction() {
+        $("#progress").attr("value",0);
+        $("#remainTime").text("");
+        $("#break").attr("disabled", "disabled");
+        $("#solve").removeAttr("disabled");
+        $("#progressui").hide();
+    }
+    $("#break").click(function () {
+        if (worker) {
+            worker.terminate();
+        }
+        worker = null;
+        uiWaitForAction();
     });
     $("#count").click(function () {
         var count = FORMULAFINDER.formulaCount(getOptions());
         var timeSeconds = count/getOperationsPerSecond();
-        $("#solutionsadd").hide();
-        $("#solution").text("possible formulas count: "+ count + " computation time: "+displayTimeFromMillis(timeSeconds*1000)); 
+        $("#solutionsadd").show();
+        $("#solution").text("formulas variations count: "+ count); 
+        $("#solutionTime").text("max computation time: "+displayTimeFromMillis(timeSeconds*1000));
     });
     function getOptions() {
         var opt = {

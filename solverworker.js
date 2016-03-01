@@ -6,10 +6,7 @@
  */
 importScripts('zahlen.js');
 
-console.info("worker loaded");
-
 onmessage = function(e) {
-    console.info("get message in worker");
     var options = e.data.options;
     options.callback = function(formula,testCount) {
         var message = {
@@ -28,5 +25,5 @@ onmessage = function(e) {
         self.postMessage(message);
     };
     FORMULAFINDER.sucheformel(e.data.proben,options);
-    //self.close();
+    self.close();
 }

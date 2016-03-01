@@ -6,7 +6,7 @@
  */
 $(document).ready(function() {
     var rowsCount = 6;
-    $("#wait").hide();
+    $("#solutionsadd").hide();
     var operations = "<div id='operations'>";
     for (let operation of FORMULAFINDER.operations) {
         operations += "<label><input type='checkbox' name='operation' checked='checked' value='"+operation.name+"'>"+operation.name+"("+operation.sign+")"+"</label><br>";
@@ -24,6 +24,26 @@ $(document).ready(function() {
             }
         }
     });
+    function displayTimeFromMillis(millis) {
+        var seconds = Math.floor(millis/1000);
+        if (seconds<120) {
+            return Math.round(seconds) + " seconds";
+        }
+        var minutes = Math.floor(seconds/60);
+        if (minutes<60) {
+            return minutes + " min " + seconds%60 + " sec";
+        }
+        var hours = Math.floor(minutes/60);
+        if (hours<24) {
+            return hours + " h " + minutes%60 + " min " + seconds%60 + " sec";
+        }
+        var days = Math.floor(hours/24);
+        if (days<364) {
+            return days + " days " + hours%24 + " h " + minutes%60 + " min " + seconds%60 + " sec";
+        }
+        var years = Math.floor(days/364);
+        return yeard + " years " + days%364 + " days " + hours%24 + " h " + minutes%60 + " min " + seconds%60 + " sec";
+    }
     $("#solve").click(function() {
         var i,proben = [];
         for (i=0;i<=rowsCount;i++) {
@@ -39,39 +59,57 @@ $(document).ready(function() {
             $("#solution").text("searching formula (wait...)");
             $("#progress").attr("value",0);
             $("#remainTime").text("");
-            setTimeout(function() {
-                var start = new Date().getTime();
-                var options = getOptions();
-                options.callback = function(formula,testCount) {
-                    var end = new Date().getTime();
-                    $("#solution").text(FORMULAFINDER.formulaAsString(formula)+ " in seconds: "+((end-start)/1000)+ " formulas evaluated: "+testCount);
-                    $("#solve").removeAttr("disabled");
-                    if (formula!==undefined) {
-                        var le = $("#le").val();
-                        var re = $("#re").val();
-                        if (le && re) {
-                            $("#ee").text(FORMULAFINDER.evalFormula(formula,parseInt(le),parseInt(re)));
+            $("#solutionsadd").hide();
+            
+            var worker = new Worker("solverworker.js");
+            var start = new Date().getTime();
+            
+            worker.onerror = function(e) {
+                console.info('ERROR: Line '+ e.lineno+ ' in '+ e.filename+ ' : '+ e.message);
+            };
+
+            worker.onmessage = function(e) {
+                switch (e.data.operation) {
+                    case "result":
+                        var end = new Date().getTime();
+                        var formula = e.data.formula;
+                        var testCount = e.data.testCount;
+                        $("#solution").text(FORMULAFINDER.formulaAsString(formula));
+                        $("#solutionsadd").show();
+                        $("#solutionTime").text(displayTimeFromMillis(end-start));
+                        $("#solutionCount").text(testCount.toString());
+                        $("#solve").removeAttr("disabled");
+                        if (formula!==undefined) {
+                            var le = $("#le").val();
+                            var re = $("#re").val();
+                            if (le && re) {
+                                $("#ee").text(FORMULAFINDER.evalFormula(formula,parseInt(le),parseInt(re)));
+                            }
                         }
-                    }
-                }
-                if ($("#useProgress").is(':checked')) {
-                    options.progressCallback = function(progress,timeRemainSec) {
-                       $("#progress").attr("value",progress);
-                       $("#remainTime").text(timeRemainSec.toString());
-                    };
-                }
-                var formula = FORMULAFINDER.sucheformel(proben,options);
-            },0);
+                        $("#progress").attr("value",0);
+                        $("#remainTime").text("");
+                        break;
+                    case "progress":
+                        $("#progress").attr("value",e.data.progress);
+                        $("#remainTime").text(displayTimeFromMillis(e.data.timeRemainSec*1000));
+                    default:
+                        throw "unknown operation "+e.data.operation;
+                };
+            };
+            
+            var options = getOptions();
+            worker.postMessage({options: options, proben: proben});
         }       
     });
     $("#count").click(function () {
         var count = FORMULAFINDER.formulaCount(getOptions());
         var timeSeconds = count/getOperationsPerSecond();
-        $("#solution").text("possible formulas count: "+ count + " computation time in seconds: "+timeSeconds); 
+        $("#solutionsadd").hide();
+        $("#solution").text("possible formulas count: "+ count + " computation time: "+displayTimeFromMillis(timeSeconds*1000)); 
     });
     function getOptions() {
         var opt = {
-            operations: [],
+            oppnames: [],
             maxOperations: undefined,
         };
         opt.maxDepth = parseInt($("#treeDept").val());
@@ -82,12 +120,7 @@ $(document).ready(function() {
         }
         $("input[name='operation']:checked").each(function() {
             var opname = $(this).val();
-            for (let operation of FORMULAFINDER.operations) {
-                if (operation.name===opname) {
-                    opt.operations.push(operation);
-                    break;
-                }
-            }
+            opt.oppnames.push(opname);
         });
         return opt;
     }

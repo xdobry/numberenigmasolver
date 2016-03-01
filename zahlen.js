@@ -33,12 +33,27 @@ var FORMULAFINDER = (function () {
         },"|")
     ];
     
+    var operationsMap = new Map();
+    for (let operation of operationsDef) {
+        operationsMap.set(operation.name,operation);
+    }
+    
     function countOperations(tree) {
         if (typeof tree === "object") {
             return 1 + countOperations(tree.l) + countOperations(tree.r)
         } else {
             return 0;
         }
+    }
+    
+    function stripFormula(tree) {
+        if (typeof tree === "object") {
+            tree.opname = tree.op.name;
+            delete tree.op;
+            stripFormula(tree.l);
+            stripFormula(tree.r);
+        }
+        return tree;
     }
         
     zahlenf.sucheformel = function(probeArr,options) {
@@ -133,15 +148,21 @@ var FORMULAFINDER = (function () {
         
         var foundFormula = undefined,testCount=0;
         if (options.progressCallback) {
-            if (!options.callback) {
-                throw "progressCallback need also callback function";
-            }
+            var step = 2000,endTime,timeDiff,testCount=0;
             var startTime = new Date().getTime();
             var fCount = zahlenf.formulaCount(options);
-            var step = 2000000;
-            var generator = genFormulaTill(options.maxDepth,options.maxOperations);
-            var testCount = 0;
-            checkResult();
+            for (let f of genFormulaTill(options.maxDepth,options.maxOperations)) {
+                testCount++;
+                if (testProben(f,probeArr)) {
+                    foundFormula =f;
+                    break;
+                }
+                if (testCount%step===0 && testCount>0) {
+                    var endTime = new Date().getTime();
+                    var timeDiff = endTime-startTime;
+                    options.progressCallback(testCount/fCount*100,timeDiff*(fCount-testCount)/(testCount*1000));
+                }
+            }
         } else {
             for (let f of genFormulaTill(options.maxDepth,options.maxOperations)) {
                 testCount++;
@@ -150,12 +171,13 @@ var FORMULAFINDER = (function () {
                     break;
                 }
             }
-            if (options.callback) {
-               options.callback(foundFormula,testCount); 
-            } else {
-                return foundFormula;
-            }
         }
+        if (options.callback) {
+           options.callback(stripFormula(foundFormula),testCount); 
+        } else {
+            return foundFormula;
+        }
+
     }
     
     function checkOptions(options) {
@@ -163,11 +185,24 @@ var FORMULAFINDER = (function () {
             options.maxDepth = 2;
         }
         if (options.operations===undefined) {
-            options.operations = operationsDef;
+            if (options.oppnames) {
+                options.operations = [];
+                for (let opname of options.oppnames) {
+                    for (let operation of operationsDef) {
+                        if (operation.name===opname) {
+                            options.operations.push(operation);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                options.operations = operationsDef;
+            }
         }
         if (options.maxConstant===undefined) {
             options.maxConstant = 1;
         }
+
     }
     
     function testProben(desc,probeArr) {
@@ -179,8 +214,16 @@ var FORMULAFINDER = (function () {
         };
         return true;
     };
+    
+    function getOperationForTree(tree) {
+        if (tree.op) {
+            return tree.op
+        } else {
+            return operationsMap.get(tree.opname);
+        }
+    }
 
-     function evalFormel(desc,a,b) {
+    function evalFormel(desc,a,b) {
         if (typeof desc === "number") {
             return desc;
         } else if (typeof desc === "string") {
@@ -196,6 +239,23 @@ var FORMULAFINDER = (function () {
             return ret;
         }
     };
+    
+    function evalFormelStripped(desc,a,b) {
+        if (typeof desc === "number") {
+            return desc;
+        } else if (typeof desc === "string") {
+            if (desc === "a") {
+                return a;
+            } else if (desc === "b") {
+                return b;
+            } else {
+                throw "expect string a or b got:"+desc;
+            }
+        } else {
+            var ret = getOperationForTree(desc).op(evalFormelStripped(desc.l,a,b),evalFormelStripped(desc.r,a,b));
+            return ret;
+        }
+    };
 
     zahlenf.formulaAsString = function(desc) {
         if (desc===undefined) {
@@ -208,7 +268,7 @@ var FORMULAFINDER = (function () {
                 return param.toString();
             }
         }
-        return "(" + paramAsString(desc.l) + desc.op.sign + paramAsString(desc.r)+ ")";
+        return "(" + paramAsString(desc.l) + getOperationForTree(desc).sign + paramAsString(desc.r)+ ")";
     }
     
     function operationsForDepth(depth) {
@@ -296,10 +356,8 @@ var FORMULAFINDER = (function () {
         return countFormulaTill(options.maxDepth,options.maxOperations);
     }
     zahlenf.operations=operationsDef;
-    zahlenf.evalFormula=evalFormel;
+    zahlenf.evalFormula=evalFormelStripped;
     
     return zahlenf;
 }());
-
-
 

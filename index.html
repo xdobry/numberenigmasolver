@@ -18,7 +18,7 @@ GPL License
     	 <ul class="nav navbar-nav">
     	 	<li> <a href="qunit.html" class="navbar-link">QUnit</a></li>
     	 	<li><a href="gentest.html" class="navbar-link">QUnit Generator</a></li>
-    	 	<li><a href="https://github.com/xdobry/tclsqueak" class="navbar-link">Source Code (GitHub)</a></li>
+    	 	<li><a href="https://github.com/xdobry/numberenigmasolver" class="navbar-link">Source Code (GitHub)</a></li>
     	 	<li><a href="http://www.xdobry.de" class="navbar-link">Author Artur Trzewik</a></li>
     	 </ul>
    	</div>
@@ -26,11 +26,11 @@ GPL License
         <div class="container">
         <div class="jumbotron">
         <h2>Number Enigma Sover</h2>
-        Search formula to solve easy two parameters functions. For example to find that 4 op 6 = 210 (the formula is (b-a)|(a+b)).
+        Search formula to solve easy two parameters functions. For example to find that 4 op 6<td>=</td> <td> <td> <td>210 (the formula is (b-a)|(a+b)).
         The program is implemented in java script and can be run in browser which supports ECMA6.
         </div>
         <div class="row">
-            <div class="col-md-6">
+        <div class="col-md-6">
         <div class="btn-group">
             <button id="example2"  class="btn btn-link btn-sm">Original Japan Example</button>
             <button id="example3" class="btn btn-link btn-sm">Spiegel Example</button>
@@ -41,17 +41,16 @@ GPL License
         <p></p>
         <button class="btn btn-default" id="clean">Clean</button>
         <p></p>
-        <table id="numbertable">
-            <tr><td><input type="number" id="l0"></td><td> + <input type="number" id="r0"></td><td> = <input type="number" id="e0"></td></tr>
-            <tr><td><input type="number" id="l1"></td><td> + <input type="number" id="r1"></td><td> = <input type="number" id="e1"></td></tr>
-            <tr><td><input type="number" id="l2"></td><td> + <input type="number" id="r2"></td><td> = <input type="number" id="e2"></td></tr>
-            <tr><td><input type="number" id="l3"></td><td> + <input type="number" id="r3"></td><td> = <input type="number" id="e3"></td></tr>
-            <tr><td><input type="number" id="l4"></td><td> + <input type="number" id="r4"></td><td> = <input type="number" id="e4"></td></tr>
-            <tr><td><input type="number" id="l5"></td><td> + <input type="number" id="r5"></td><td> = <input type="number" id="e5"></td></tr>
-            <tr><td><input type="number" id="l6"></td><td> + <input type="number" id="r6"></td><td> = <input type="number" id="e6"></td></tr>
-            <tr class="questionrow"><td><input type="number" id="le"></td><td>+ <input type="number" id="re"></td><td>= <span id="ee">?</span></td></tr>
+        <table class="table table-condensed">
+            <tr><td><input type="number" id="l0" class="form-control"></td><td>+</td><td><input type="number" id="r0" class="form-control"></td><td>=</td><td><input type="number" id="e0" class="form-control"></td></tr>
+            <tr><td><input type="number" id="l1" class="form-control"></td><td>+</td><td><input type="number" id="r1" class="form-control"></td><td>=</td><td><input type="number" id="e1" class="form-control"></td></tr>
+            <tr><td><input type="number" id="l2" class="form-control"></td><td>+</td><td><input type="number" id="r2" class="form-control"></td><td>=</td><td><input type="number" id="e2" class="form-control"></td></tr>
+            <tr><td><input type="number" id="l3" class="form-control"></td><td>+</td><td><input type="number" id="r3" class="form-control"></td><td>=</td><td><input type="number" id="e3" class="form-control"></td></tr>
+            <tr><td><input type="number" id="l4" class="form-control"></td><td>+</td><td><input type="number" id="r4" class="form-control"></td><td>=</td><td><input type="number" id="e4" class="form-control"></td></tr>
+            <tr><td><input type="number" id="l5" class="form-control"></td><td>+</td><td><input type="number" id="r5" class="form-control"></td><td>=</td><td><input type="number" id="e5" class="form-control"></td></tr>
+            <tr><td><input type="number" id="l6" class="form-control"></td><td>+</td><td><input type="number" id="r6" class="form-control"></td><td>=</td><td><input type="number" id="e6" class="form-control"></td></tr>
+            <tr class="success"><td><input type="number" id="le" class="form-control"></td><td>+</td><td><input type="number" id="re" class="form-control"></td><td>=</td><td><span id="ee">?</span></td></tr>
         </table>
-        <br>
         <div class="btn-group">
             <button class="btn btn-primary" id="solve">Find Formula</button>
             <button class="btn btn-default" id="count">Count Formula Variations</button>
@@ -63,16 +62,24 @@ GPL License
             Max Remaining Time: <span id="remainTime"></span>
         </div>
         <h4>Solution: <span id="solution" class="bg-success"></span></h3>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group"><label for="treeDept">Formula Tree Depth:</label><input type="number" id="treeDept" value="2" min="0" max="3"></div>
-                <div class="form-group"><label for="maxOperations">Max Operations:</label><input type="number" id="maxOperations" min="0" max="10"></div>
-                <div id="opcompexity" class="checkbox">
-                    <div id="operations">
-                    </div>
+        <div id="solutionsadd">
+            <p>
+                time: <span id="solutionTime"></span>
+            </p>
+            <p>
+                evaluated formulas: <span id="solutionCount"></span>
+            </p>
+        </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group"><label for="treeDept">Formula Tree Depth:</label><input type="number" id="treeDept" value="2" min="0" max="3" class="form-control"></div>
+            <div class="form-group"><label for="maxOperations">Max Operations:</label><input type="number" id="maxOperations" min="0" max="10" class="form-control"></div>
+            <div id="opcompexity" class="checkbox">
+                <div id="operations">
                 </div>
-                <div class="form-group"><label for="maxConstant">Max parameter constant value:</label><input type="number" id="maxConstant" min="1" max="10" value="1"></div>
             </div>
+            <div class="form-group"><label for="maxConstant">Max parameter constant value:</label><input type="number" id="maxConstant" min="1" max="10" value="1" class="form-control"></div>
+        </div>
         </div>
         <hr>
         <p>
@@ -94,7 +101,7 @@ GPL License
         <footer class="bg-info">
 		<div class="container">
 		<p class="text-muted text-center">
-		<a href="http://www.gnu.org/licenses/gpl-3.0">GPL Licensed Software</a> written by Artur Trzewik
+                    <a href="http://www.gnu.org/licenses/gpl-3.0">GPL Licensed Software</a> written by Artur Trzewik
 		</p>
 		</div>
 	</footer>

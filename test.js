@@ -1,10 +1,9 @@
 "use strict";
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * GPL License
+ * Programmed by Artur Trzewik
+ * 
  */
-
 QUnit.test("init", function (assert) {
     assert.equal(1, 1, "Just test");
     var probe = [[1,2,3],[2,2,4],[3,3,6]];
@@ -41,16 +40,16 @@ QUnit.test("init", function (assert) {
     var start = new Date().getTime();
     FORMULAFINDER.sucheformel(probe,{maxDepth:1});
     var end = new Date().getTime();
-    //var count = FORMULAFINDER.formulaCount({maxDepth:1})
-    //console.info("operation in one second:"+(count*1000/(end-start)));
+    var count = FORMULAFINDER.formulaCount({maxDepth:1})
+    console.info("operation in one second:"+(count*1000/(end-start)));
     
-    var options = {operations: [FORMULAFINDER.operations[0]],maxDepth: 1,maxOperations: 2,maxConstant: 0};
+    var options = {operations: ["plus"],maxDepth: 1,maxOperations: 2,maxConstant: 0};
     assert.equal(20,FORMULAFINDER.formulaCount(options),"depth: 1 maxops: 2");
-    options = {operations: [FORMULAFINDER.operations[0]],maxDepth: 1,maxOperations: 3,maxConstant: 0};
+    options = {operations: ["plus"],maxDepth: 1,maxOperations: 3,maxConstant: 0};
     assert.equal(FORMULAFINDER.formulaCount(options),36,"depth: 1 maxops: 3");
-    options = {operations: [FORMULAFINDER.operations[0]],maxDepth: 2,maxOperations: 3,maxConstant: 0};
+    options = {operations: ["plus"],maxDepth: 2,maxOperations: 3,maxConstant: 0};
     assert.equal(FORMULAFINDER.formulaCount(options),100,"depth: 2 maxops: 3");
-    options = {operations: [FORMULAFINDER.operations[0]],maxDepth: 2,maxOperations: 4,maxConstant: 0};
+    options = {operations: ["plus"],maxDepth: 2,maxOperations: 4,maxConstant: 0};
     assert.equal(FORMULAFINDER.formulaCount(options),292,"depth: 2 maxops: 4");
     console.info("operations depth:2 max:3:"+FORMULAFINDER.formulaCount(options));
     
